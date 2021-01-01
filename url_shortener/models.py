@@ -1,5 +1,5 @@
 import string
-from random import choice
+from random import choices
 from datetime import datetime
 
 from .extensions import db
@@ -13,7 +13,7 @@ class Link(db.Model):
     
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.short_url = self.generate_short_link
+        self.short_url = self.generate_short_link()
         
         
     def generate_short_link(self):
@@ -25,4 +25,4 @@ class Link(db.Model):
         if link: # if the short URL has been used before, it will generate a new one. 
             return self.generate_short_link() 
         
-        return str(short_url)
+        return short_url

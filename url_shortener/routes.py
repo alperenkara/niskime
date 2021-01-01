@@ -1,15 +1,20 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, redirect, url_for
 from .extensions import db
 from .models import Link
-
+from .auth import requires_auth
 short = Blueprint('short', __name__)
 
 @short.route('/<short_url>')
-
 def redirect_to_url(short_url):
-    pass 
+    link = Link.query.filter_by(short_url=short_url).first_or_404() # DB query 
+    browser_link = link.original_url
+    # return redirect(link.original_url,code=302)
+    link.visits = link.visits+1
+    db.session.commit()
+    return redirect((str(browser_link))) # original URL page
 
 @short.route('/')
+
 def index():
     return render_template('index.html') 
 
@@ -27,8 +32,10 @@ def add_link():
 
 @short.route('/stats')
 def stats():
-    pass 
+    links = Link.query.all()
+    
+    return render_template('stats.html',links=links) 
 
 @short.errorhandler(404)
 def page_not_found(e):
-    return '', 404
+    return render_template('404.html'),404
