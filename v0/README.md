@@ -1,2 +1,0 @@
-# niskime
-Python URL Shortener
