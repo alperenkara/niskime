@@ -38,4 +38,37 @@ def register():
     else:
         return render_template("register.html")
     
+@app.route("/login", methods =["GET", "POST"])
+
+def login():
+    
+    if request.method == "POST": 
+        # check from validation
+        
+        if not request.form.get("email") or not request.form.get("password"):
+            return "please fill out the form elements."
+        
+        # check the user email if it's in the DB. 
+        
+        user = c.execute("SELECT * FROM users WHERE email=:email", {"email": request.form.get("email")}).fetchall()
+        
+        if len(user) != 1:
+            return "You aren't registered."
+        
+        # check password hask. 
+        
+        pwhash = user[0][2]
+        if sha256_crypt.verify(request.form.get("password"),pwhash) == False: 
+            return "Wrong Password"
+        
+        # Login to the system via user session
+        
+        
+        # if it's a sucsefull event forward the user to the dashboard. 
+        
+        return redirect("/dashboard")
+    
+    else: 
+        return render_template("login.html")
+    
     
