@@ -14,10 +14,11 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "secretkey"
 
 
-@app.route("/")
-@login_required
+@app.route("/", methods=["GET","POST"])
 def index():
     return render_template("index.html")
+
+# @login_required
 
 
 
@@ -94,3 +95,6 @@ def logout():
     session.clear()
     
     return redirect(url_for("login"))
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=1234, debug=True)
