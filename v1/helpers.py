@@ -1,6 +1,7 @@
 from functools import wraps 
 from flask import request, redirect, url_for, session
 import random 
+import string 
 
 def login_required(f):
     @wrap(f)
@@ -13,4 +14,5 @@ def login_required(f):
 def random_str(digit = 4):
     chars = ""
     for i in range(digit):
-        pass 
+        chars += random.choice(string.ascii_letters + string.digits)
+    return chars 
